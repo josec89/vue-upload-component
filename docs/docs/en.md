@@ -143,13 +143,13 @@ This is the first phase of the process. We'll tell the backend that we are going
 
 Use the option `startBody` to add more parameters to the body of this request.
 
-The backend will provide a `session_id` (to identify the upload) and a `end_offset` which is the size of every chunk
+The backend should provide a `session_id` (to identify the upload) and a `end_offset` which is the size of every chunk
 
 #### upload
 
 In this phase we'll upload every chunk until all of them are uploaded. This step allows some failures in the backend, and will retry up to `maxRetries` times.
 
-We'll send the `session_id`, `start_chunk` and `chunk` (the sliced blob - part of file we are uploading). We spect the backend to return `status = 'success'`, we'll retry otherwise.
+We'll send the `session_id`, `start_chunk` and `chunk` (the sliced blob - part of file we are uploading). We expect the backend to return `{ status: 'success' }`, we'll retry otherwise.
 
 Use the option `uploadBody` to add more parameters to the body of this request.
 
@@ -160,6 +160,8 @@ In this phase we tell the backend that there are no more chunks to upload, so it
 Use the option `finishBody` to add more parameters to the body of this request.
 
 #### Example
+
+In the following example we are going to add `Chunk Upload Functionality`. This component will use `Chunk Upload` when the size of the file is > `1MB`, it will behave as the `Simple example` when the size of the file is lower.
 
 ```html
   <file-upload
@@ -175,7 +177,7 @@ Use the option `finishBody` to add more parameters to the body of this request.
       maxActive: 3,
       maxRetries: 5,
 
-      // In this case our backend also needs the user id to operate
+      // Example in the case your backend also needs the user id to operate
       startBody: {
         user_id: user.id
       }
